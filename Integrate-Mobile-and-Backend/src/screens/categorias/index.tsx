@@ -88,15 +88,15 @@ export default function CategoriaScreen() {
 
     return (
         <SafeAreaView style={styles.container}>
+            {/* Cabeçalho só com título */}
             <View style={styles.header}>
-                <Text style={styles.titleScreen}>Gestão de categorias</Text>
-                <TouchableOpacity style={styles.button} onPress={formVisible ? closeForm : openCreate}>
-                    <Text style={styles.buttonText}>{formVisible ? 'Cancelar' : 'Novo +'}</Text>
-                </TouchableOpacity>
+                <Text style={styles.titleScreen}>Categorias</Text>
+                <Text style={styles.countBadge}>{categorias.length}</Text>
             </View>
 
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
+            {/* Formulário inline */}
             {formVisible && (
                 <View style={styles.formCard}>
                     <Text style={styles.modalTitle}>
@@ -104,27 +104,26 @@ export default function CategoriaScreen() {
                     </Text>
 
                     <TextInput
-                        placeholder="Digite o nome da categoria"
-                        placeholderTextColor="#6b7280"
+                        placeholder="Nome da categoria"
+                        placeholderTextColor="#a78bfa"
                         value={nomeCategoria}
                         onChangeText={setNomeCategoria}
                         style={styles.input}
                     />
 
-                    <View style={styles.formActions}>
-                        <TouchableOpacity style={[styles.formButton, styles.cancelButton]} onPress={closeForm}>
-                            <Text style={{ color: '#111827', fontWeight: '600' }}>Cancelar</Text>
-                        </TouchableOpacity>
+                    {/* Salvar empilhado, cancelar como link abaixo */}
+                    <TouchableOpacity style={styles.saveButton} onPress={salvar}>
+                        <Text style={styles.saveButtonText}>Salvar</Text>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.formButton, styles.saveButton]} onPress={salvar}>
-                            <Text style={{ color: '#f9fafb', fontWeight: '600' }}>Salvar</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={styles.cancelLink} onPress={closeForm}>
+                        <Text style={styles.cancelLinkText}>Cancelar</Text>
+                    </TouchableOpacity>
                 </View>
             )}
 
             {loading ? (
-                <ActivityIndicator style={styles.loading} size="large" color="#111827" />
+                <ActivityIndicator style={styles.loading} size="large" color="#7c3aed" />
             ) : (
                 <FlatList
                     data={categorias}
@@ -132,15 +131,18 @@ export default function CategoriaScreen() {
                     contentContainerStyle={styles.listContent}
                     onRefresh={loadData}
                     refreshing={loading}
+                    ListEmptyComponent={
+                        <Text style={styles.emptyText}>Nenhuma categoria cadastrada.</Text>
+                    }
                     renderItem={({ item }) => (
+                        /* Card: info à esquerda, botões em coluna à direita */
                         <View style={styles.card}>
-                            <Text style={styles.nomeProduto}>{item.dc_categoria}</Text>
-                            <View style={styles.infoContainer}>
-                                <Text style={styles.label}>ID:</Text>
-                                <Text style={styles.valueText}>{item.id_categoria}</Text>
+                            <View style={styles.cardInfo}>
+                                <Text style={styles.cardNome}>{item.dc_categoria}</Text>
+                                <Text style={styles.cardId}>#{item.id_categoria}</Text>
                             </View>
 
-                            <View style={styles.acoesContainer}>
+                            <View style={styles.cardActions}>
                                 <TouchableOpacity style={styles.buttonEdit} onPress={() => openEdit(item)}>
                                     <Text style={styles.buttonEditText}>Editar</Text>
                                 </TouchableOpacity>
@@ -153,6 +155,13 @@ export default function CategoriaScreen() {
                     )}
                 />
             )}
+
+            {/* FAB flutuante no canto inferior direito */}
+            {!formVisible && (
+                <TouchableOpacity style={styles.fab} onPress={openCreate}>
+                    <Text style={styles.fabText}>+</Text>
+                </TouchableOpacity>
+            )}
         </SafeAreaView>
     );
 }
@@ -161,145 +170,179 @@ export default function CategoriaScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#faf5ff',
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 10,
         paddingHorizontal: 16,
-        paddingVertical: 16,
+        paddingTop: 20,
+        paddingBottom: 12,
     },
     titleScreen: {
-        fontSize: 20,
+        fontSize: 26,
+        fontWeight: '800',
+        color: '#4c1d95',
+    },
+    countBadge: {
+        backgroundColor: '#7c3aed',
+        color: '#fff',
+        fontSize: 13,
         fontWeight: '700',
-        color: '#111827',
-    },
-    button: {
-        backgroundColor: '#111827',
-        minWidth: 110,
-        height: 40,
-        borderRadius: 10,
-        justifyContent: 'center',
-        paddingHorizontal: 14,
-    },
-    buttonText: {
-        color: '#f9fafb',
-        fontSize: 14,
-        textAlign: 'center',
-        fontWeight: '600',
+        borderRadius: 20,
+        paddingHorizontal: 9,
+        paddingVertical: 2,
+        overflow: 'hidden',
     },
     errorText: {
         color: '#dc2626',
         paddingHorizontal: 16,
         marginBottom: 8,
     },
+    emptyText: {
+        textAlign: 'center',
+        color: '#a78bfa',
+        marginTop: 48,
+        fontSize: 15,
+    },
     loading: {
         marginTop: 24,
     },
     listContent: {
         paddingHorizontal: 16,
-        paddingBottom: 24,
+        paddingBottom: 96,
     },
+    /* Card em linha: info esquerda + botões coluna direita */
     card: {
         backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 16,
-        marginBottom: 12,
+        borderRadius: 14,
+        paddingVertical: 14,
+        paddingLeft: 16,
+        paddingRight: 10,
+        marginBottom: 10,
         borderWidth: 1,
-        borderColor: '#e5e7eb',
-    },
-    nomeProduto: {
-        fontSize: 17,
-        fontWeight: '600',
-        marginBottom: 8,
-        color: '#111827',
-    },
-    infoContainer: {
+        borderColor: '#ddd6fe',
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 12,
-        gap: 6,
     },
-    label: {
-        color: '#6b7280',
-        fontSize: 14,
+    cardInfo: {
+        flex: 1,
     },
-    valueText: {
-        color: '#111827',
-        fontSize: 14,
+    cardNome: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#4c1d95',
+        marginBottom: 4,
+    },
+    cardId: {
+        fontSize: 12,
+        color: '#a78bfa',
         fontWeight: '500',
     },
-    acoesContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        justifyContent: 'flex-end',
+    /* Botões em coluna no lado direito */
+    cardActions: {
+        flexDirection: 'column',
+        gap: 6,
+        alignItems: 'stretch',
+        minWidth: 72,
     },
     buttonEdit: {
-        backgroundColor: '#f3f4f6',
-        paddingHorizontal: 12,
-        paddingVertical: 8,
+        backgroundColor: '#ede9fe',
+        paddingHorizontal: 10,
+        paddingVertical: 7,
         borderRadius: 8,
+        alignItems: 'center',
     },
     buttonEditText: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: '600',
-        color: '#111827',
+        color: '#6d28d9',
     },
     buttonDelete: {
-        backgroundColor: '#f3f4f6',
-        paddingHorizontal: 12,
-        paddingVertical: 8,
+        backgroundColor: '#fee2e2',
+        paddingHorizontal: 10,
+        paddingVertical: 7,
         borderRadius: 8,
+        alignItems: 'center',
     },
     buttonDeleteText: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: '600',
-        color: '#111827',
+        color: '#dc2626',
     },
+    /* Formulário inline */
     formCard: {
         backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 16,
+        borderRadius: 14,
+        padding: 18,
         marginHorizontal: 16,
         marginBottom: 12,
         borderWidth: 1,
-        borderColor: '#e5e7eb',
+        borderColor: '#ddd6fe',
     },
     modalTitle: {
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: '700',
-        color: '#111827',
-        marginBottom: 12,
+        color: '#4c1d95',
+        marginBottom: 14,
     },
     input: {
-        height: 52,
+        height: 50,
         width: '100%',
-        marginBottom: 12,
+        marginBottom: 14,
         borderWidth: 1,
-        borderColor: '#d1d5db',
+        borderColor: '#ddd6fe',
         borderRadius: 10,
-        paddingHorizontal: 12,
-        backgroundColor: '#ffffff',
+        paddingHorizontal: 14,
+        backgroundColor: '#faf5ff',
         color: '#111827',
+        fontSize: 15,
     },
-    formActions: {
-        flexDirection: 'row',
-        gap: 12,
-    },
-    formButton: {
-        flex: 1,
-        paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    cancelButton: {
-        backgroundColor: '#ffffff',
-        borderWidth: 1,
-        borderColor: '#d1d5db',
-    },
+    /* Salvar: botão cheio largo */
     saveButton: {
-        backgroundColor: '#111827',
+        backgroundColor: '#7c3aed',
+        borderRadius: 10,
+        paddingVertical: 14,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    saveButtonText: {
+        color: '#ffffff',
+        fontWeight: '700',
+        fontSize: 15,
+    },
+    /* Cancelar: link de texto centralizado */
+    cancelLink: {
+        alignItems: 'center',
+        paddingVertical: 4,
+    },
+    cancelLinkText: {
+        color: '#7c3aed',
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    /* FAB */
+    fab: {
+        position: 'absolute',
+        bottom: 28,
+        right: 24,
+        width: 58,
+        height: 58,
+        borderRadius: 29,
+        backgroundColor: '#7c3aed',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#7c3aed',
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 4 },
+        elevation: 8,
+    },
+    fabText: {
+        color: '#fff',
+        fontSize: 30,
+        lineHeight: 34,
+        fontWeight: '300',
     },
 });

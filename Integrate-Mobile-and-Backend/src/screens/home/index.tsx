@@ -11,16 +11,42 @@ export default function Home() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.title}>Atividade Integracao SQL</Text>
-                <Text style={styles.subtitle}>Selecione uma opcao para continuar</Text>
+            {/* Banner superior com fundo roxo */}
+            <View style={styles.banner}>
+                <Text style={styles.bannerLabel}>SENAI · Mobile</Text>
+                <Text style={styles.bannerTitle}>Gestão de{'\n'}Estoque</Text>
+            </View>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Produtos')} style={styles.button}>
-                    <Text style={styles.buttonText}>Produtos</Text>
+            {/* Cartões de navegação */}
+            <View style={styles.cardsContainer}>
+                <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => navigation.navigate('Categorias')}
+                    activeOpacity={0.85}
+                >
+                    <View style={styles.cardIcon}>
+                        <Text style={styles.cardIconText}>🗂</Text>
+                    </View>
+                    <View style={styles.cardTextGroup}>
+                        <Text style={styles.cardTitle}>Categorias</Text>
+                        <Text style={styles.cardSubtitle}>Criar, editar e excluir</Text>
+                    </View>
+                    <Text style={styles.cardArrow}>›</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Categorias')} style={styles.button}>
-                    <Text style={styles.buttonText}>Categorias</Text>
+                <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => navigation.navigate('Produtos')}
+                    activeOpacity={0.85}
+                >
+                    <View style={styles.cardIcon}>
+                        <Text style={styles.cardIconText}>📦</Text>
+                    </View>
+                    <View style={styles.cardTextGroup}>
+                        <Text style={styles.cardTitle}>Produtos</Text>
+                        <Text style={styles.cardSubtitle}>Criar, editar e excluir</Text>
+                    </View>
+                    <Text style={styles.cardArrow}>›</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -30,38 +56,80 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8fafc',
-        justifyContent: "center",
-        padding: 16
+        backgroundColor: '#faf5ff',
     },
-    content: {
-        width: '100%'
+    /* Banner roxo no topo */
+    banner: {
+        backgroundColor: '#7c3aed',
+        paddingHorizontal: 24,
+        paddingTop: 36,
+        paddingBottom: 40,
+        borderBottomLeftRadius: 28,
+        borderBottomRightRadius: 28,
     },
-    title: {
-        fontSize: 24,
-        fontWeight: '700',
-        color: '#111827',
-        marginBottom: 6
+    bannerLabel: {
+        color: '#c4b5fd',
+        fontSize: 12,
+        fontWeight: '600',
+        letterSpacing: 1.5,
+        textTransform: 'uppercase',
+        marginBottom: 8,
     },
-    subtitle: {
-        fontSize: 14,
-        color: '#6b7280',
-        marginBottom: 18
+    bannerTitle: {
+        color: '#ffffff',
+        fontSize: 34,
+        fontWeight: '800',
+        lineHeight: 40,
     },
-    button: {
-        backgroundColor: '#111827',
-        width: '100%',
-        height: 50,
-        borderRadius: 10,
-        marginBottom: 10,
-        justifyContent: 'center',
+    /* Cartões de navegação */
+    cardsContainer: {
+        padding: 20,
+        gap: 12,
+        marginTop: 8,
+    },
+    card: {
+        backgroundColor: '#ffffff',
+        borderRadius: 16,
+        paddingVertical: 18,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#111827'
+        borderColor: '#ddd6fe',
+        gap: 14,
+        shadowColor: '#7c3aed',
+        shadowOpacity: 0.08,
+        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 3 },
+        elevation: 3,
     },
-    buttonText: {
-        fontSize: 16,
-        textAlign: 'center',
-        color: '#f9fafb',
-        fontWeight: '600'
-    }
-})
+    cardIcon: {
+        width: 48,
+        height: 48,
+        borderRadius: 14,
+        backgroundColor: '#ede9fe',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cardIconText: {
+        fontSize: 22,
+    },
+    cardTextGroup: {
+        flex: 1,
+    },
+    cardTitle: {
+        fontSize: 17,
+        fontWeight: '700',
+        color: '#4c1d95',
+    },
+    cardSubtitle: {
+        fontSize: 13,
+        color: '#a78bfa',
+        marginTop: 2,
+    },
+    cardArrow: {
+        fontSize: 26,
+        color: '#7c3aed',
+        fontWeight: '300',
+    },
+});
