@@ -13,7 +13,7 @@ export default function Home() {
         <SafeAreaView style={styles.container}>
             {/* Banner superior com fundo roxo */}
             <View style={styles.banner}>
-                <Text style={styles.bannerLabel}>SENAI · Mobile</Text>
+                <Text style={styles.bannerLabel}>Stock · Mobile</Text>
                 <Text style={styles.bannerTitle}>Gestão de{'\n'}Estoque</Text>
             </View>
 
@@ -25,7 +25,7 @@ export default function Home() {
                     activeOpacity={0.85}
                 >
                     <View style={styles.cardIcon}>
-                        <Text style={styles.cardIconText}>🗂</Text>
+                        <Text style={styles.cardIconText}></Text>
                     </View>
                     <View style={styles.cardTextGroup}>
                         <Text style={styles.cardTitle}>Categorias</Text>
@@ -40,7 +40,7 @@ export default function Home() {
                     activeOpacity={0.85}
                 >
                     <View style={styles.cardIcon}>
-                        <Text style={styles.cardIconText}>📦</Text>
+                        <Text style={styles.cardIconText}></Text>
                     </View>
                     <View style={styles.cardTextGroup}>
                         <Text style={styles.cardTitle}>Produtos</Text>
