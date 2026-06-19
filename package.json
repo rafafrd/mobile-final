@@ -1,13 +1,23 @@
 {
   "name": "api-backend",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "start": "node server.js"
+    "start": "ts-node server.ts",
+    "build": "tsc",
+    "start:prod": "node dist/server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^11.10.0",
     "cors": "^2.8.6",
-    "express": "^4.22.2"
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "mysql2": "^3.22.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,10 +1,10 @@
 # Projeto Integração Mobile + Backend
 
-Atividade escolar SENAI — aplicativo Expo + React Native consumindo uma API REST local com banco de dados SQLite.
+Atividade escolar SENAI — aplicativo Expo + React Native consumindo uma API REST local com banco de dados MySQL.
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -15,9 +15,11 @@ Atividade escolar SENAI — aplicativo Expo + React Native consumindo uma API RE
 
 ```
 /
-├── server.js                        ← API backend (Express + SQLite)
+├── server.ts                        ← API backend (Express + TypeScript)
+├── src/database/connection.ts       ← Pool MySQL2 (singleton)
+├── .env                             ← credenciais do banco (não commitado)
+├── docs/db.sql                      ← script SQL do banco
 ├── package.json                     ← dependências do backend
-├── dados.db                         ← banco SQLite gerado automaticamente
 └── Integrate-Mobile-and-Backend/    ← app mobile (Expo + React Native)
 ```
 
@@ -26,12 +28,41 @@ Atividade escolar SENAI — aplicativo Expo + React Native consumindo uma API RE
 ## Pré-requisitos
 
 - [Node.js](https://nodejs.org/) instalado
+- MySQL rodando localmente na porta `3306`
 - [Expo Go](https://expo.dev/go) instalado no celular
 - Celular e computador na **mesma rede Wi-Fi**
 
 ---
 
-## 1. Subir a API (backend)
+## 1. Configurar o banco de dados
+
+Execute o script SQL no seu MySQL:
+
+```bash
+mysql -u root -p < docs/db.sql
+```
+
+Isso cria o banco `stockmobile`, as tabelas e insere os dados iniciais.
+
+---
+
+## 2. Configurar o `.env`
+
+Crie um arquivo `.env` na raiz com as credenciais:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=1234
+DB_DATABASE=stockmobile
+
+PORT=3000
+```
+
+---
+
+## 3. Subir a API (backend)
 
 Na raiz do projeto, instale as dependências na primeira vez:
 
@@ -39,17 +70,32 @@ Na raiz do projeto, instale as dependências na primeira vez:
 npm install
 ```
 
-Inicie o servidor:
+### Scripts disponíveis
+
+| Script | Comando | Descrição |
+|--------|---------|-----------|
+| Desenvolvimento | `npm start` | Executa com `ts-node` (sem compilar) |
+| Build | `npm run build` | Compila TypeScript para `dist/` |
+| Produção | `npm run start:prod` | Executa o JavaScript compilado em `dist/` |
+
+#### Desenvolvimento (recomendado)
 
 ```bash
-node server.js
+npm start
+```
+
+#### Produção
+
+```bash
+npm run build
+npm run start:prod
 ```
 
 O terminal deve exibir:
 
 ```
 API rodando em http://0.0.0.0:3000
-Acesse pelo mobile: http://10.87.169.91:3000
+DB: root@localhost:3306/stockmobile
 ```
 
 > **Atenção:** se o IP da máquina mudar, atualize `BASE_URL` em  
@@ -70,7 +116,7 @@ Acesse pelo mobile: http://10.87.169.91:3000
 
 ---
 
-## 2. Subir o app mobile (Expo)
+## 4. Subir o app mobile (Expo)
 
 Em um **novo terminal**, entre na pasta do mobile:
 
@@ -98,7 +144,7 @@ Escaneie o QR code exibido no terminal com o app **Expo Go** no celular.
 
 **Terminal 1 — API:**
 ```bash
-node server.js
+npm start
 ```
 
 **Terminal 2 — Mobile:**
